@@ -1,0 +1,19 @@
+{% extends "AppUniversidad/padre.html" %}
+{% load static %}
+
+{% block titulo %}
+
+<h1> Bienvenido al Campus </h1>
+<br>
+<h2> Para ingresar debes iniciar sesión</h2>
+<h2> Si aún no tienes una cuenta creala haciendo click en "Registrarme"</h2>
+<br>
+
+{% endblock %}
+
+{% block boton %}
+
+<a class="btn btn-primary" href="{% url 'login' %}">Ingresar</a>
+<a class="btn btn-primary" href="{% url 'registrarme' %}">Registrarme</a>
+
+{% endblock %}
