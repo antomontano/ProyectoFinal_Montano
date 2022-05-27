@@ -1,0 +1,33 @@
+{% extends "AppUniversidad/padre2.html" %}
+{% load static %}
+
+{% block titulo %}
+
+<h2> Ingresá a qué materia y mesa deseas inscribirte </h2>
+<h2> A= Cálculo II </h2>
+    <h2> B= Lógica III </h2>
+    <h2> C= Álgebra Aplicada </h2>
+    <br>
+    <h2>Mesa 1: 20 al 24/6 turno MAÑANA.</h2> 
+    <h2>Mesa 2: 20 al 24/6 turno TARDE.</h2>
+    <h2>Mesa 3: 27/6 al 1/7 turno MAÑANA.</h2>
+    <h2>Mesa 4: 27/6 al 1/7 turno TARDE.</h2>
+<br>
+
+{% endblock %}
+
+{% block boton %}
+
+<form action="{% url 'inscribirmeFinales' %}" method="POST">{% csrf_token %}
+    <p>Materia: <input type="text" name="Materia"> </p>
+    <p>Mesa: <input type="number" name="Mesa"> </p>
+    <input type="submit" value="Inscribirme">
+
+</form>
+<br>
+<br>
+
+<a class="btn btn-primary" href="{% url 'inscripciones' %}">Ver mis inscripciones</a>
+
+
+{% endblock %}

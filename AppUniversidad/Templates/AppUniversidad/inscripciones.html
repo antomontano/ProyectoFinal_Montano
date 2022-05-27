@@ -1,0 +1,26 @@
+{% extends "AppUniversidad/padre2.html" %}
+{% load static %}
+
+{% block titulo %}
+
+<h2> Finales a los que te has inscripto: </h2>
+
+{% for inscripcion in inscripciones %}
+<li> {{inscripcion}} </li>
+{% endfor %}
+
+{% endblock %}
+
+{% block contenidoquecambia %}
+
+<h2> Recuerda que:  </h2>
+    <h2> A= Cálculo II </h2>
+    <h2> B= Lógica III </h2>
+    <h2> C= Álgebra Aplicada </h2>
+    <br>
+    <h2>Mesa 1: 20 al 24/6 turno MAÑANA.</h2> 
+    <h2>Mesa 2: 20 al 24/6 turno TARDE.</h2>
+    <h2>Mesa 3: 27/6 al 1/7 turno MAÑANA.</h2>
+    <h2>Mesa 4: 27/6 al 1/7 turno TARDE.</h2>
+
+{% endblock %}

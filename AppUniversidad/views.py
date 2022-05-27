@@ -16,3 +16,20 @@ def registrarme(request):
 def login(request):
     return render(request,'AppUniversidad/login.html')
 
+def inscripciones(request):
+    return render(request,'AppUniversidad/inscripciones.html')
+
+def inscribirmeFinales(request):
+    if request.method == 'POST':
+        inscripcion=Inscripcion(Materia=request.POST['Materia'], Mesa=request.POST['Mesa'])
+        inscripcion.save()
+        return render(request,'AppUniversidad/inscribirmeFinales.html')
+    return render(request,'AppUniversidad/inscribirmeFinales.html')
+
+def principal(request):
+    return render(request,'AppUniversidad/principal.html')
+#---------------------
+
+def LeerInscripciones(request):
+    inscripciones=Inscripcion.objects.all()
+    return render(request, 'AppUniversidad/inscripciones.html', {'inscripciones':inscripciones})
