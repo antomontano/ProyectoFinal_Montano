@@ -3,13 +3,27 @@
 
 {% block titulo %}
 
-<h2> Ingresá tu nombre, tu email y creá una contraseña </h2>
+<h3> {{ Mensaje }}  </h3>
+<h2> Creá un usuario y una clave </h2>
 <br>
 
 {% endblock %}
 
 {% block boton %}
 
-<p>formulario de registro</p>
+<form method="POST"> {% csrf_token %}
+    
+    {{ formulario.as_p }}
+
+    <input type="submit" value="Registrarme">
+
+</form>
+<br>
+<br>
+
+<button>
+    <a href="{% url 'inicio' %}"> Volver </a>
+</button>
+
 
 {% endblock %}

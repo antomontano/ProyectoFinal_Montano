@@ -9,10 +9,14 @@
 <li> {{inscripcion}} </li>
 
 <button>
- <a href="{% url 'EliminarInscripcion' inscripcion.id %}"> Eliminar </a>
+ <a href="{% url 'EliminarInscripcion' inscripcion.id %}"> Eliminar examen </a>
 </button>
 
 {% endfor %}
+
+<br>
+<br>
+<h3> (Solo podrás modificar tus inscripciones hasta el 4/7) </h3>
 
 {% endblock %}
 
