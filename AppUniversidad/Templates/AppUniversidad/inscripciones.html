@@ -7,6 +7,11 @@
 
 {% for inscripcion in inscripciones %}
 <li> {{inscripcion}} </li>
+
+<button>
+ <a href="{% url 'EliminarInscripcion' inscripcion.id %}"> Eliminar </a>
+</button>
+
 {% endfor %}
 
 {% endblock %}

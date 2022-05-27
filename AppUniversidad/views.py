@@ -33,3 +33,9 @@ def principal(request):
 def LeerInscripciones(request):
     inscripciones=Inscripcion.objects.all()
     return render(request, 'AppUniversidad/inscripciones.html', {'inscripciones':inscripciones})
+
+def EliminarInscripcion(request, id):
+    inscripcion=Inscripcion.objects.get(id=id)
+    inscripcion.delete()
+    inscripciones=Inscripcion.objects.all()
+    return render(request, 'AppUniversidad/inscripciones.html', {'inscripciones':inscripciones})

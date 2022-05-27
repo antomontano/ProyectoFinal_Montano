@@ -9,5 +9,6 @@ urlpatterns = [
     path('inscripciones', LeerInscripciones, name= 'inscripciones'),
     path('inscribirmeFinales', inscribirmeFinales, name= 'inscribirmeFinales'),
     path('principal', principal, name= 'principal'),
+    path('EliminarInscripcion/<id>', EliminarInscripcion, name= 'EliminarInscripcion'),
 
 ]
