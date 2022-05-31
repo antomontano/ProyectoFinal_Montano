@@ -1,0 +1,31 @@
+{% extends "AppUniversidad/padre2.html" %}
+{% load static %}
+
+{% block titulo %}
+
+<h3> {{ Mensaje }}  </h3>
+<h2> Editar usuario </h2>
+<br>
+
+{% endblock %}
+
+{% block boton %}
+
+<form action="{% url 'editarPerfil' %}" method="POST"> {% csrf_token %}
+    
+    {{ formulario.as_table }}
+
+    <br>
+    <br>
+    <input type="submit" value="Guardar">
+
+</form>
+<br>
+<br>
+
+<button>
+    <a href="{% url 'principal' %}"> Volver </a>
+</button>
+
+
+{% endblock %}

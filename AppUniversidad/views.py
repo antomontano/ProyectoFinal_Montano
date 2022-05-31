@@ -1,3 +1,4 @@
+from msilib.schema import ListView
 from django import http
 from django.shortcuts import render
 from .models import *
@@ -6,6 +7,7 @@ from AppUniversidad.forms import *
 from django.urls import reverse_lazy
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 def inicio(request):
@@ -20,8 +22,10 @@ def registrarme(request):
 def login(request):
     return render(request,'AppUniversidad/login.html')
 
+
 def inscripciones(request):
     return render(request,'AppUniversidad/inscripciones.html')
+
 
 def inscribirmeFinales(request):
     if request.method == 'POST':
@@ -30,13 +34,16 @@ def inscribirmeFinales(request):
         return render(request,'AppUniversidad/inscribirmeFinales.html')
     return render(request,'AppUniversidad/inscribirmeFinales.html')
 
+@login_required
 def principal(request):
     return render(request,'AppUniversidad/principal.html')
 #---------------------
 
+
 def LeerInscripciones(request):
     inscripciones=Inscripcion.objects.all()
     return render(request, 'AppUniversidad/inscripciones.html', {'inscripciones':inscripciones})
+
 
 def EliminarInscripcion(request, id):
     inscripcion=Inscripcion.objects.get(id=id)
@@ -74,15 +81,44 @@ def Login_request(request):
 #---------------REGISTRO-----------------
 
 def registrarme(request):
+    
     if request.method == "POST":
-        formulario = UserCreationForm(request.POST)
         
+        formulario = UserRegisterForm(request.POST)
         if formulario.is_valid():
-            username=formulario.cleaned_data['username']
+
+            username = formulario.cleaned_data['username']
             formulario.save()
-            return render(request, 'AppUniversidad/login.html', {'Mensaje': f'Usuario {username} creado exitosamente'})
-        else:
-            return render(request, 'AppUniversidad/login.html', {'Mensaje': 'No se pudo crear el usuario'})
-    else:
-        formulario = UserCreationForm()
-        return render(request, 'AppUniversidad/registrarme.html', {'formulario': formulario})
+            return render(request,"AppUniversidad/registrarme.html" ,  {"Mensaje":"Usuario Creado"})
+
+
+    else:     
+        formulario = UserRegisterForm()     
+
+    return render(request,"AppUniversidad/registrarme.html" ,  {"formulario":formulario})
+
+
+#-----------------------------------------------
+
+def editarPerfil(request):
+
+      usuario = request.user
+     
+      if request.method == 'POST':
+            formulario = UserEditForm(request.POST, instance=usuario) 
+            if formulario.is_valid(): 
+
+                  informacion = formulario.cleaned_data
+                  usuario.email = informacion['email']
+                  usuario.password1 = informacion['password1']
+                  usuario.password2 = informacion['password1']
+                  usuario.save()
+
+                  return render(request, "AppUniversidad/principal.html") #Vuelvo al inicio o a donde quieran
+
+      else: 
+    
+            formulario= UserEditForm(initial={ 'email':usuario.email}) 
+
+    
+      return render(request, "AppUniversidad/editarPerfil.html", {"formulario":formulario, "usuario":usuario})
