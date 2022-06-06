@@ -20,9 +20,11 @@
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
             <div class="container px-4 px-lg-5">
-                <a class="navbar-brand" href="{% url 'editarPerfil' %}">Mi Perfil</a>
+                <a class="navbar-brand" href="{% url 'editarPerfil' %}">Editar usuario</a>
+                <a class="navbar-brand" href="{% url 'chats' %}">Chat</a>
                 <a class="navbar-brand" href="{% url 'principal' %}">Principal</a>
                 <a class="navbar-brand" href="{% url 'logout' %}">Cerrar Sesión</a>
+                <img src="{{url}}" alt=""/>
             </div>
         </nav>
         <!-- Page Header-->

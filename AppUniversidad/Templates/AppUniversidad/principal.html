@@ -3,7 +3,9 @@
 
 {% block titulo %}
 
-<h2> Bienvenido {{usuario}} </h2>
+{{ Mensaje }}
+<br>
+<h2> ¡Bienvenido/a! </h2>
 <br>
 
 {% endblock %}
@@ -11,5 +13,8 @@
 {% block boton %}
 
 <a class="btn btn-danger" href="{% url 'inscribirmeFinales' %}">Inscribirme a los exámenes finales</a>
+<br>
+<br>
+<a class="btn btn-primary" href="{% url 'consulta' %}">Consultas</a>
 
 {% endblock %}

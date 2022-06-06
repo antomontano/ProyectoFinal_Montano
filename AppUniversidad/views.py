@@ -1,3 +1,4 @@
+from typing import List
 from msilib.schema import ListView
 from django import http
 from django.shortcuts import render
@@ -6,8 +7,10 @@ from django.http import HttpResponse
 from AppUniversidad.forms import *
 from django.urls import reverse_lazy
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login as auth_login, logout, authenticate
 from django.contrib.auth.decorators import login_required
+
+from .models import Mensaje
 # Create your views here.
 
 def inicio(request):
@@ -36,7 +39,8 @@ def inscribirmeFinales(request):
 
 @login_required
 def principal(request):
-    return render(request,'AppUniversidad/principal.html')
+    avatar=Avatar.objects.filter(user = request.user)
+    return render(request,'AppUniversidad/principal.html', {'url': avatar})
 #---------------------
 
 
@@ -64,8 +68,14 @@ def Login_request(request):
             user=authenticate(username=usuario, password=clave)
             
             if user is not None:
-                login(request)
-                return render(request, 'AppUniversidad/principal.html')
+                auth_login(request, user)
+                avatar=Avatar.objects.filter(user = user)
+                if len(avatar)!=0:
+                    avatar=avatar[0].avatar.url
+                else:
+                    avatar=""
+                return render(request,'AppUniversidad/principal.html', {'url': avatar})
+                
             
             else:
                 return render(request, 'AppUniversidad/login.html', {'Mensaje': 'Usuario incorrecto, intente nuevamente'})
@@ -114,11 +124,48 @@ def editarPerfil(request):
                   usuario.password2 = informacion['password1']
                   usuario.save()
 
-                  return render(request, "AppUniversidad/principal.html") #Vuelvo al inicio o a donde quieran
-
+                  return render(request, "AppUniversidad/principal.html",  {"Mensaje":"Usuario Modificado"})
       else: 
     
             formulario= UserEditForm(initial={ 'email':usuario.email}) 
 
     
       return render(request, "AppUniversidad/editarPerfil.html", {"formulario":formulario, "usuario":usuario})
+
+
+def consulta(request):
+    return render(request,'AppUniversidad/consulta.html')
+
+#--------------------------------
+def chats(request):
+        return render(request, 'AppUniversidad/chats.html',
+                      {'users': User.objects.exclude(username=request.user.username)})
+
+def chat_detalle(request, sender=None, receiver=None):
+    if request.method == 'GET':
+        messages = Mensaje.objects.filter(sender_id=sender, receiver_id=receiver, is_read=False)
+        for message in messages:
+            message.is_read=True
+            message.save()
+        form=MensajeFormulario()
+        return render (request, 'AppUniversidad/chat_detalle.html', {'users': User.objects.exclude(username=request.user.username),
+        'form':form,
+        'sender':sender,
+        'receiver':receiver,
+        'messages': Mensaje.objects.filter(sender_id=sender, receiver_id=receiver) | 
+        Mensaje.objects.filter(sender_id=receiver, receiver_id=sender)})
+
+    else:
+        form_vacio=MensajeFormulario()
+        data=MensajeFormulario(request.POST)
+        if data.is_valid():
+            data_clean=data.cleaned_data.get('message')
+            message=Mensaje(sender_id=sender, receiver_id=receiver, message=data_clean)
+            message.save()
+            return render(request, 'AppUniversidad/chat_detalle.html', {'users': User.objects.exclude(username=request.user.username),
+            'form':form_vacio,
+            'form_lleno':data,
+            'sender':sender,
+            'receiver':receiver,
+            'messages': Mensaje.objects.filter(sender_id=sender, receiver_id=receiver) |
+             Mensaje.objects.filter(sender_id=receiver, receiver_id=sender)})

@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
+from AppUniversidad.models import Mensaje
+
 class inscribirmeFinales(forms.Form):
     Materia= forms.CharField(max_length=1)
     Mesa= forms.IntegerField()
@@ -35,3 +37,11 @@ class UserEditForm(UserCreationForm):
         model = User
         fields = [ 'email', 'password1', 'password2'] 
         help_texts = {k:"" for k in fields}
+
+
+class MensajeFormulario(forms.Form):
+    message=forms.CharField(label="")
+
+    class Meta:
+        model=Mensaje
+        fields=['sender','receiver','message','is_read']

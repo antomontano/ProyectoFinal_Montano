@@ -1,0 +1,14 @@
+{% extends "AppUniversidad/padre2.html" %}
+{% load static %}
+
+{% block titulo %}
+
+<h1> ¿Sobre qué materia tenés dudas? </h1>
+<br>
+<a class="btn btn-danger" href="{% url 'consulta' %}">Cálculo II</a>
+<a class="btn btn-danger" href="{% url 'consulta' %}">Álgebra aplicada</a>
+<a class="btn btn-danger" href="{% url 'consulta' %}">Lógica III</a>
+
+{% endblock %}
+
+
