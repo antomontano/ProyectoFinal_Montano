@@ -4,10 +4,7 @@
 
 {% block titulo %}
 <h1 class="mb-5">Chats</h1>
-{% endblock %}
 
-
-{% block contenidoquecambia %}
 {% for user in users %}
 
 <a class="btn btn-primary" href="{% url 'chat_detalle' request.user.id user.id %}">Chatear con: {{user}}</a>

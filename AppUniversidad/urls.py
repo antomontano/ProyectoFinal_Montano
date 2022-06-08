@@ -13,7 +13,11 @@ urlpatterns = [
     path('EliminarInscripcion/<id>', EliminarInscripcion, name= 'EliminarInscripcion'),
     path('logout', LogoutView.as_view(template_name="AppUniversidad/logout.html"), name= 'logout'),
     path('editarPerfil', editarPerfil, name= 'editarPerfil'),
-    path('consulta', consulta, name= 'consulta'),
+    path('consulta', LeerConsultas, name= 'consulta'),
     path('chats/',chats, name='chats'),
     path('chats/<int:sender>/<int:receiver>/', chat_detalle, name='chat_detalle'),
+    path('crearConsulta', CrearConsulta, name= 'crearConsulta'),
+    path('EliminarConsulta/<id>', EliminarConsulta, name= 'EliminarConsulta'),
+    path('editarConsulta/<id>', EditarConsulta, name= 'editarConsulta'),
+    path('consulta/detalle/<pk>', DetalleConsulta.as_view(), name= 'detalleConsulta'),
 ]

@@ -1,6 +1,7 @@
 from distutils.command.upload import upload
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 # Create your models here.
 
@@ -29,3 +30,14 @@ class Mensaje(models.Model):
 
     class Meta:
         ordering = ('timestamp',)
+
+
+#---------------------------------
+
+class Consulta(models.Model):
+    fecha=models.DateField(default=timezone.now)
+    titulo=models.CharField(max_length=70)
+    cuerpo=models.CharField(max_length=1000)
+    ejercicio=models.ImageField(blank=True, upload_to='ejercicio')
+    def __str__(self):
+        return f"Consulta: {self.titulo}"

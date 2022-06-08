@@ -3,11 +3,26 @@
 
 {% block titulo %}
 
-<h1> ¿Sobre qué materia tenés dudas? </h1>
+{% for consulta in consultas %}
+<li> {{consulta}} </li>
+
+
+<button>
+    <a href="{% url 'EliminarConsulta' consulta.id %}" > Eliminar </a>
+</button>
+<button>
+    <a href="{% url 'editarConsulta' consulta.id %}" > Editar </a>
+</button>
+<button>
+    <a href="{% url 'detalleConsulta' consulta.id %}" > Ver </a>
+</button>
+
+{% endfor %}
+
 <br>
-<a class="btn btn-danger" href="{% url 'consulta' %}">Cálculo II</a>
-<a class="btn btn-danger" href="{% url 'consulta' %}">Álgebra aplicada</a>
-<a class="btn btn-danger" href="{% url 'consulta' %}">Lógica III</a>
+<br>
+
+<a class="btn btn-primary" href="{% url 'crearConsulta' %}">Hacer consulta</a>
 
 {% endblock %}
 

@@ -1,5 +1,4 @@
 from typing import List
-from msilib.schema import ListView
 from django import http
 from django.shortcuts import render
 from .models import *
@@ -11,6 +10,9 @@ from django.contrib.auth import login as auth_login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 
 from .models import Mensaje
+from .models import Consulta
+from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
+
 # Create your views here.
 
 def inicio(request):
@@ -25,11 +27,11 @@ def registrarme(request):
 def login(request):
     return render(request,'AppUniversidad/login.html')
 
-
+@login_required
 def inscripciones(request):
     return render(request,'AppUniversidad/inscripciones.html')
 
-
+@login_required
 def inscribirmeFinales(request):
     if request.method == 'POST':
         inscripcion=Inscripcion(Materia=request.POST['Materia'], Mesa=request.POST['Mesa'])
@@ -43,12 +45,12 @@ def principal(request):
     return render(request,'AppUniversidad/principal.html', {'url': avatar})
 #---------------------
 
-
+@login_required
 def LeerInscripciones(request):
     inscripciones=Inscripcion.objects.all()
     return render(request, 'AppUniversidad/inscripciones.html', {'inscripciones':inscripciones})
 
-
+@login_required
 def EliminarInscripcion(request, id):
     inscripcion=Inscripcion.objects.get(id=id)
     inscripcion.delete()
@@ -109,7 +111,7 @@ def registrarme(request):
 
 
 #-----------------------------------------------
-
+@login_required
 def editarPerfil(request):
 
       usuario = request.user
@@ -133,10 +135,8 @@ def editarPerfil(request):
       return render(request, "AppUniversidad/editarPerfil.html", {"formulario":formulario, "usuario":usuario})
 
 
-def consulta(request):
-    return render(request,'AppUniversidad/consulta.html')
-
 #--------------------------------
+
 def chats(request):
         return render(request, 'AppUniversidad/chats.html',
                       {'users': User.objects.exclude(username=request.user.username)})
@@ -169,3 +169,73 @@ def chat_detalle(request, sender=None, receiver=None):
             'receiver':receiver,
             'messages': Mensaje.objects.filter(sender_id=sender, receiver_id=receiver) |
              Mensaje.objects.filter(sender_id=receiver, receiver_id=sender)})
+
+
+
+#---------------------------------------------------
+@login_required
+def LeerConsultas(request):
+    consultas=Consulta.objects.all()
+    return render(request, 'AppUniversidad/consulta.html', {'consultas':consultas})
+
+@login_required
+def CrearConsulta(request):
+    if request.method == 'POST':
+
+            formulario = ConsultaFormulario(request.POST)
+
+            if formulario.is_valid():
+
+                  informacion = formulario.cleaned_data
+
+                  consulta = Consulta(fecha=informacion['fecha'], titulo=informacion['titulo'], cuerpo=informacion['cuerpo'], ejercicio=informacion['ejercicio']) 
+
+                  consulta.save()
+
+                  return render(request, "AppUniversidad/consulta.html")
+
+    else: 
+
+            formulario= ConsultaFormulario()
+
+    return render(request, "AppUniversidad/crearConsulta.html", {"formulario":formulario})
+
+@login_required
+def EliminarConsulta(request, id):
+    consulta=Consulta.objects.get(id=id)
+    consulta.delete()
+    consultas=Consulta.objects.all()
+    contexto={'consultas':consultas}
+    return render(request,'AppUniversidad/consulta.html', contexto)
+
+
+@login_required
+def EditarConsulta(request, id):
+    consulta=Consulta.objects.get(id=id)
+    if request.method == 'POST':
+        formulario = ConsultaFormulario(request.POST)
+        if formulario.is_valid():
+
+            informacion = formulario.cleaned_data
+                  
+            consulta.cuerpo = informacion['cuerpo']
+            consulta.ejercicio = informacion['ejercicio']
+
+            consulta.save()
+
+            consultas=Consulta.objects.all()
+            contexto={'consultas':consultas}
+            return render(request,'AppUniversidad/consulta.html', contexto)
+    else: 
+            formulario= ConsultaFormulario(initial={'titulo': consulta.titulo, 'cuerpo': consulta.cuerpo, 'ejercicio':consulta.ejercicio}) 
+
+    return render(request, "AppUniversidad/editarConsulta.html", {"formulario":formulario, "id":id})
+
+
+
+
+#------------------------------------------------------------------
+class DetalleConsulta(DetailView):
+
+      model = Consulta
+      template_name = "AppUniversidad/detalleConsulta.html"

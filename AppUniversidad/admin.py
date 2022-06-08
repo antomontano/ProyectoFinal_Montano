@@ -4,3 +4,4 @@ from .models import *
 
 admin.site.register(Inscripcion)
 admin.site.register(Avatar)
+admin.site.register(Consulta)

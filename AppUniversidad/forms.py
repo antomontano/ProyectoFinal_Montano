@@ -3,6 +3,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 from AppUniversidad.models import Mensaje
+from .models import Consulta
+from django.utils import timezone
 
 class inscribirmeFinales(forms.Form):
     Materia= forms.CharField(max_length=1)
@@ -45,3 +47,16 @@ class MensajeFormulario(forms.Form):
     class Meta:
         model=Mensaje
         fields=['sender','receiver','message','is_read']
+
+
+
+class ConsultaFormulario(forms.Form):
+    fecha=forms.DateTimeField(initial=timezone.now)
+    titulo=forms.CharField(max_length=70)
+    cuerpo=forms.CharField(max_length=1000)
+    ejercicio=forms.ImageField()
+
+    class Meta:
+        model=Consulta
+        fields=['fecha','titulo','cuerpo','ejercicio']
+        help_texts={k:"" for k in fields}
